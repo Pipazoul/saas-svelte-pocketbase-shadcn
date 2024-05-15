@@ -14,6 +14,15 @@ Saas with the following stack:
 - Temporal connected to PocketBase and watching for changes
 
 
+## Roadmap
+- [ ] 📨 Receive email for subscription/payment/unsubscription
+- [ ] 🔒 Add security rules to PocketBase
+- [ ] 🌐 Internationalization
+- [ ] 🔑 Reset password
+- [ ] 👤 Upload user profile picture
+- [ ] 🧼 Refactor: Types 
+
+
 ## Screenshots
 
 ![image](medias/landing.png)
