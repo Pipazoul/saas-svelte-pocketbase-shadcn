@@ -1,0 +1,34 @@
+services:
+  db-dev:
+    container_name: dev-saas-shadcn-db
+    image: yassinsiouda/saas-shadcn-db:dev
+    build: db/
+    ports:
+      - "${dbEND_PORT}:8090"
+    volumes:
+      - ./db/pb_migrations/:/pb_migrations
+      - ./db/pb_data/:/pb_data/
+  front-dev:
+    image: yassinsiouda/dev-saas-shadcn-front:dev
+    container_name: dev-saas-shadcn-front
+    build: 
+      context: front/
+      target: "dev"
+    volumes:
+      - ./front/src/:/app/src
+    ports:
+      - "${FRONT_PORT}:5173" #keep same port to avoid Cross scripting errors
+    env_file:
+      - .env
+  landing-dev:
+    image: yassinsiouda/dev-saas-shadcn-landing:dev
+    container_name: dev-saas-shadcn-landing
+    build: 
+      context: landing/
+      target: "dev"
+    volumes:
+      - ./landing/src/:/app/src
+    ports:
+      - "${LANDING_PORT}:5173" #keep same port to avoid Cross scripting errors
+    env_file:
+      - .env
