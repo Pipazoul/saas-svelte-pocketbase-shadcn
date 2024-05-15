@@ -41,7 +41,9 @@
                 {#if $currentUser.plan === 'free'}
                     <Button disabled>Current plan</Button>
                 {:else}
-                    <Button on:click={() => subscribe('free')}>Subscribe</Button>
+                    <a href="/stripe/unsubscribe?currentUserId={$currentUser.id}">
+                        <Button>Subscribe</Button>
+                    </a>
                 {/if}
             </Card.Footer>
           </Card.Root>

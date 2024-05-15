@@ -26,8 +26,9 @@ export async function signup(username: string, email: string, password: string,p
             username,
             password,
             passwordConfirm,
+            plan: "free",
         };
-        const user = await pb.collection("users").create<UsersResponse>(data);
+        await pb.collection("users").create<UsersResponse>(data);
         
         await login(username, password);
         

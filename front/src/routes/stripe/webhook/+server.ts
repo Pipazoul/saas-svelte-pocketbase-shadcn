@@ -58,9 +58,11 @@ export const POST = (async ({request}) => {
             const authData = await pb.admins.authWithPassword(env.PRIVATE_POCKETBASE_IDENTITY, env.PRIVATE_POCKETBASE_PASSWORD);
             
             const stripe_customer_id = session.customer;
+            const stripe_subscription_id = session.subscription;
+            const stripe_subscription_date = new Date().toISOString();
             
             //update user to subscribed status 
-            await pb.collection("users").update(userId, {role: "admin", stripe_customer_id, "plan": plan}, authData);
+            await pb.collection("users").update(userId, {role: "admin", stripe_customer_id, stripe_subscription_id, stripe_subscription_date, "plan": plan}, authData);
             return new Response(json({status: 200}), {status: 200});
         }
         catch(e){
