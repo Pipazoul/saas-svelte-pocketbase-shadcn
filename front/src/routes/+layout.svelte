@@ -1,5 +1,7 @@
 <script>
 	import '../app.css';
+	import { ModeWatcher } from "mode-watcher";
+	import { toggleMode } from "mode-watcher";
 	import { onMount } from 'svelte';
 	import * as Avatar from "$lib/components/ui/avatar/index";
 	import * as DropdownMenu from "$lib/components/ui/dropdown-menu";
@@ -9,7 +11,7 @@
 	import Notifications from '$lib/components/utils/Notifications.svelte';
 	import Fa from 'svelte-fa';
 	import Logo from "$lib/assets/favicon.svg";
-	import { faPlus, faUser, faFileInvoice, faRightFromBracket, faBook } from '@fortawesome/free-solid-svg-icons';
+	import { faPlus, faUser, faFileInvoice, faRightFromBracket, faBook, faSun, faMoon } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { logout } from '../lib/utils/auth';
 	import VerifyBanner from '../lib/components/account/VerifyBanner.svelte';
@@ -130,6 +132,15 @@
 				</div>
 			</div> 
 		  </div>
+		  <Button on:click={toggleMode} variant="outline" size="icon" class="absolute right-4 bottom-4">
+			<Fa icon={faSun}
+			  class="h-[1.2rem] w-[1.2rem] rotate-0 scale-100 transition-all dark:-rotate-90 dark:scale-0"
+			/>
+			<Fa icon={faMoon}
+			  class="absolute h-[1.2rem] w-[1.2rem] rotate-90 scale-0 transition-all dark:rotate-0 dark:scale-100"
+			/>
+			<span class="sr-only">Toggle theme</span>
+		</Button>
 	</body>
 	{:else}
 		<slot/>

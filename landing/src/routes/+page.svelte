@@ -6,9 +6,9 @@
 	import Pattern_3 from '$lib/assets/pattern_3.png';
 	import Button from '$lib/components/ui/button/button.svelte';
   import * as Card from "$lib/components/ui/card";
-  import {env} from '$env/dynamic/public'
+  import {PUBLIC_FRONT_URL} from '$env/static/public'
 
-  const frontUrl = env.PUBLIC_FRONT_URL;
+  const frontUrl = PUBLIC_FRONT_URL
   const CurrentYear = new Date().getFullYear();
 
 </script>

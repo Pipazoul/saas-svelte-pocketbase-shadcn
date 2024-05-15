@@ -1,3 +1,4 @@
+# Development stage
 FROM node:lts-alpine AS dev
 
 WORKDIR /app
@@ -19,21 +20,26 @@ EXPOSE 5173
 
 ENTRYPOINT [ "npm", "run", "dev"]
 
+# Build stage
 FROM node:lts-alpine AS build
+ARG PUBLIC_FRONT_URL
 
 WORKDIR /app
 
-# copy node modules from dev stage
+# Copy node modules and build artifacts from dev stage
 COPY --from=dev /app/ /app/
+
+ENV PUBLIC_FRONT_URL=$PUBLIC_FRONT_URL
 
 RUN npm run build
 
-FROM node:lts-alpine AS prod
+# Production stage
+FROM nginx:alpine AS prod
 
 WORKDIR /app
 
-COPY --from=build /app/ /app/
+COPY --from=build /app/build/ /usr/share/nginx/html
 
-WORKDIR /app/build
+WORKDIR /usr/share/nginx/html
 
-ENTRYPOINT [ "node", "index.js" ]
+ENTRYPOINT [ "nginx", "-g", "daemon off;" ]

@@ -10,9 +10,8 @@ Saas with the following stack:
 - Email Login
 - Mail verification
 - Password Reset
-- Subscription Management
-- Temporal connected to PocketBase and watching for changes
-
+- Subscription/Unsubscription Management
+- Temporal connected to PocketBase and decrementing user credits
 
 ## Roadmap
 - [ ] 📨 Receive email for subscription/payment/unsubscription
@@ -21,6 +20,7 @@ Saas with the following stack:
 - [ ] 🔑 Reset password
 - [ ] 👤 Upload user profile picture
 - [ ] 🧼 Refactor: Types 
+- [ ] 📱Responsive design
 
 
 ## Screenshots
@@ -35,14 +35,22 @@ copy `.env.example` to `.env` and fill the required fields
 
 Launch the stack with `docker-compose up`
 
-Landing page is available at http://localhost:2002
+Landing page is available at http://localhost:2000
 Frontend is available at http://localhost:2001
-Backend is available at http://localhost:2002
-Temporal UI is available at http://localhost:2003
+Database is available at http://localhost:2002
+Backend is available at http://localhost:2003
+Temporal UI is available at http://localhost:2004
 
 **Start temporal schdules**
 
 ```bash
+docker exec -it dev-saas-shadcn-back npm run schedule.start
+```
+
+**Run temporal workflow**
+
+```bash
+docker exec -it dev-saas-shadcn-backend npm run workflow
 ```
 
 

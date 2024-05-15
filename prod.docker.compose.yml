@@ -4,7 +4,7 @@ services:
     image: yassinsiouda/saas-shadcn-db:latest
     build: db/
     ports:
-      - "${dbEND_PORT}:8090"
+      - "${DB_PORT}:8090"
     volumes:
       - ./db/pb_migrations/:/pb_migrations
       - ./db/pb_data/:/pb_data/
@@ -17,7 +17,7 @@ services:
     volumes:
       - ./front/src/:/app/src
     ports:
-      - "${FRONT_PORT}:5173" #keep same port to avoid Cross scripting errors
+      - "${FRONT_PORT}:3000" #keep same port to avoid Cross scripting errors
     env_file:
       - .env
   landing:
@@ -26,9 +26,73 @@ services:
     build: 
       context: landing/
       target: "prod"
+      args:
+      # dont url put between quotes to avoid build error
+        - PUBLIC_FRONT_URL=https://mydomain.com
     volumes:
       - ./landing/src/:/app/src
     ports:
-      - "${LANDING_PORT}:5173" #keep same port to avoid Cross scripting errors
+      - "${LANDING_PORT}:80" #keep same port to avoid Cross scripting errors
     env_file:
       - .env
+  back:
+    container_name: saas-shadcn-back
+    image: yassinsiouda/saas-shadcn-back:latest
+    build: 
+      context: ./back/
+      target: "prod"
+    ports:
+      - "${BACK_PORT}:3000"
+    depends_on:
+      - db
+      - postgresql
+      - temporal
+
+    volumes:
+      - ./back/src:/app/src
+      - /var/run/docker.sock:/var/run/docker.sock
+    env_file:
+      - .env
+  # temporal has no postgres_host env variable, so we need to name the postgres service postgresql
+  postgresql:
+    restart: unless-stopped
+    container_name: saas-shadcn-temporal-postgresql
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_USER: ${POSTGRES_USER}
+    image: postgres:13
+    env_file: .env
+    volumes:
+      - ./postgres/data/postgresql:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+  temporal:
+    restart: unless-stopped
+    container_name: saas-shadcn-temporal
+    depends_on:
+      postgresql:
+        condition: service_healthy
+    environment:
+      - DB=postgresql
+      - DB_PORT=${POSTGRES_PORT:-5432}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PWD=${POSTGRES_PASSWORD}
+      - POSTGRES_SEEDS=postgresql
+      - TEMPORAL_ADDRESS=temporal:7233
+      - LOG_LEVEL=info
+    image: temporalio/auto-setup:latest
+    env_file: .env
+  temporal-ui:
+    restart: unless-stopped
+    container_name: saas-shadcn-temporal-ui
+    depends_on:
+      - temporal
+    environment:
+      - TEMPORAL_ADDRESS=temporal:7233
+    image: temporalio/ui:latest
+    env_file: .env
+    ports:
+      - ${TEMPORAL_UI_PORT-4004}:${TEMPORAL_UI_PORT-4004}
