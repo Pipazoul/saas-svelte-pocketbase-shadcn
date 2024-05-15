@@ -1,14 +1,20 @@
 <script lang="ts">
-	import Title from "$lib/components/utils/Title.svelte";
-	import { currentUser } from "../../../lib/store";
+	import PlanOffering from "$lib/components/plans/PlanOffering.svelte";
+import Button from "$lib/components/ui/button/button.svelte";
+    import Title from "$lib/components/utils/Title.svelte";
+	import { currentUser } from "$lib/store";
+    $: console.log($currentUser);
 
 </script>
 <section>
     <Title text="Billing" />
-    <div class="flex flex-col justify-center">
-        <h1 class="text-2xl font-bold">Billing</h1>
-    </div>
-    <form action="/stripe/checkout?currentUserId={$currentUser.id}" method="POST">
-        <button class="btn btn-primary" type="submit" id="checkout-button">Add Credits</button>
-    </form>
+    {#if $currentUser}
+        <h2 class="text-2xl">Subscription</h2>
+        <PlanOffering />
+        
+        <h2 class="text-2xl">Credits</h2>
+        <form action="/stripe/checkout/credit?currentUserId={$currentUser.id}" method="POST">
+            <Button type="submit">Add Credits</Button>
+        </form>
+    {/if}
 </section>

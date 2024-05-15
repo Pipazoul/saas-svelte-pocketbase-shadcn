@@ -11,7 +11,8 @@ const stripe = new Stripe(env.PRIVATE_STRIPE_SECRET, {
 
 export const POST = (async (request) => {
     const currentUserId = request.url.searchParams.get('currentUserId');
-    
+    const plan = request.url.searchParams.get('plan');
+    const priceId = plan === 'pro' ? env.PRIVATE_STRIPE_PRO_PLAN_ID : env.PRIVATE_STRIPE_BASIC_PLAN_ID;
     const pb = new PocketBase(env.PRIVATE_POCKETBASE_URL ?? "http://localhost:8090");
     const authData = await pb.admins.authWithPassword(env.PRIVATE_POCKETBASE_IDENTITY, env.PRIVATE_POCKETBASE_PASSWORD);
 
@@ -19,10 +20,13 @@ export const POST = (async (request) => {
 
     let data =  {
       client_reference_id: currentUserId!,
+      metadata: { // Add metadata here
+        plan: plan, // Store the plan value
+      },
       line_items: [
         {
           // Provide the exact Price ID (for example, pr_1234) of the product you want to sell
-          price: env.PRIVATE_STRIPE_PRICE_ID,
+          price: priceId,
           quantity: 1,
         },
       ],
@@ -32,8 +36,8 @@ export const POST = (async (request) => {
       // consent_collection: {
       //   terms_of_service: "required"
       // },
-      mode: 'payment',
-      success_url: `${env.PRIVATE_FRONT_DOMAIN}/stripe/success`,
+      mode: 'subscription',
+      success_url: `${env.PRIVATE_FRONT_DOMAIN}/stripe/success/subscription`,
       cancel_url: `${env.PRIVATE_FRONT_DOMAIN}/`,
     } 
 

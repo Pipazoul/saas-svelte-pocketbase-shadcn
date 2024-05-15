@@ -9,8 +9,7 @@
 	import Notifications from '$lib/components/utils/Notifications.svelte';
 	import Fa from 'svelte-fa';
 	import Logo from "$lib/assets/favicon.svg";
-	import { faServer, faDatabase, faPlus, faUser, faFileInvoice, faRightFromBracket, faBook } from '@fortawesome/free-solid-svg-icons';
-	import { faDocker } from '@fortawesome/free-brands-svg-icons';
+	import { faPlus, faUser, faFileInvoice, faRightFromBracket, faBook } from '@fortawesome/free-solid-svg-icons';
 	import { goto } from '$app/navigation';
 	import { logout } from '../lib/utils/auth';
 	import VerifyBanner from '../lib/components/account/VerifyBanner.svelte';
@@ -35,10 +34,13 @@
 			<div class="drawer-side w-1/4 h-[calc(100vh_-_50px)]">
 				<ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
 				  <!-- Sidebar content here -->
+				<a href="/">
 				  <div class="flex items-center justify-center mb-8">
 					  <img src={Logo} alt="logo" class="w-8 h-8 " />
 					  <p class="pl-4 uppercase text-1xl font-bold">Saas</p>
 				  </div>
+				</a>
+
 				  <Separator class="mb-2"/>
 				  <li>
 					<a href="/" class="flex items-center rounded-lg px-3 py-2 text-slate-900 hover:bg-slate-100 dark:text-white dark:hover:bg-slate-700">
@@ -126,7 +128,6 @@
 					<VerifyBanner />
 					<slot />
 				</div>
-			  <label for="my-drawer-2" class="btn btn-primary drawer-button lg:hidden">Open drawer</label>
 			</div> 
 		  </div>
 	</body>
