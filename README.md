@@ -14,9 +14,27 @@ Saas with the following stack:
 - Temporal connected to PocketBase and watching for changes
 
 
-## Getting Started
+## Screenshots
 
+![image](medias/landing.png)
+![image](medias/login.png)
+![image](medias/dashboard.png)
 
+## Quick start
+
+copy `.env.example` to `.env` and fill the required fields
+
+Launch the stack with `docker-compose up`
+
+Landing page is available at http://localhost:2002
+Frontend is available at http://localhost:2001
+Backend is available at http://localhost:2002
+Temporal UI is available at http://localhost:2003
+
+**Start temporal schdules**
+
+```bash
+```
 
 
 ## Pocketbase configuration
