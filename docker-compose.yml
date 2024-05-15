@@ -4,7 +4,7 @@ services:
     image: yassinsiouda/saas-shadcn-db:dev
     build: db/
     ports:
-      - "${dbEND_PORT}:8090"
+      - "${DB_PORT}:8090"
     volumes:
       - ./db/pb_migrations/:/pb_migrations
       - ./db/pb_data/:/pb_data/

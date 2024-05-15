@@ -1,5 +1,9 @@
 <script lang="ts">
-    import { Button } from "$lib/components/ui/button";
-  </script>
-   
-  <Button>Click me</Button>
+	import Title from '$lib/components/utils/Title.svelte';
+    import { onMount } from 'svelte';
+</script>
+
+<section>
+    <Title text="Dashboard" />
+	
+</section>
